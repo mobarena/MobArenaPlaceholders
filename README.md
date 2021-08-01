@@ -33,21 +33,21 @@ These placeholders return the content for the arena the player is **currently** 
 
 For the most part, the arena specific placeholders are the exact same as the player-arena ones. However, they always show their values regardless of if the player is in the arena or not. It also has a special 'status' placeholder, which returns the current status of the arena.
 
-To use it, replace 'arena' with the actual arena name! For example, `%mobarena_default_name%` will return the name of the arena 'default' 
+To use it, replace '{arena}' with the actual arena name! For example, `%mobarena_default_name%` will return the name of the arena 'default' 
 
 | Placeholder  | Output|
 |------------- | -------------|
-|%mobarena_arena_name%  | Returns the arena name|
-|%mobarena_arena_wave%  | Returns the current arena wave number. Always starts at 1|
-|%mobarena_arena_final-wave%  | Returns the final wave in the arena. If not found, returns "∞"|
-|%mobarena_arena_remaining-mobs%  | Returns the amount of living mobs in the arena|
-|%mobarena_arena_ready%  | Returns the amount of players ready players in the arena|
-|%mobarena_arena_non-ready%  | Returns the amount of players who are _not_ ready yet|
-|%mobarena_arena_players%  | Returns the amount of living players in the arena|
-|%mobarena_arena_min-players%  | Returns the minimum amount of players needed for the arena to start|
-|%mobarena_arena_max-players%  | Returns the max amount of players the arena can hold|
-|%mobarena_arena_auto-start-timer%  | Returns the auto start timer in the arena (in seconds)|
-|%mobarena_arena_status%  | Returns `EDITING` if the arena is in edit-mode, returns `RUNNING` if there are currently players in the arena, returns `ENABLED` if the arena is open, but no one is playing, returns `DISABLED` if the arena is disabled.
-|%mobarena_arena_status-colored%  | Returns the status of the arena with some colors and formatting, just to make it look better.|
-|%mobarena_arena_player-status%  | Returns the status of the player relative to the arena. Returns `§aPlaying` if the player is playing in the arena, returns `§cDead` if the player is dead (still didn't hit respawn), returns `§7Spectating` if the player is spectating the arena, and returns `§7Not playing` if the player isn't in the arena.|
+|%mobarena_{arena}\_name%  | Returns the arena name|
+|%mobarena_{arena}\_wave%  | Returns the current arena wave number. Always starts at 1|
+|%mobarena_{arena}\_final-wave%  | Returns the final wave in the arena. If not found, returns "∞"|
+|%mobarena_{arena}\_remaining-mobs%  | Returns the amount of living mobs in the arena|
+|%mobarena_{arena}\_ready%  | Returns the amount of players ready players in the arena|
+|%mobarena_{arena}\_non-ready%  | Returns the amount of players who are _not_ ready yet|
+|%mobarena_{arena}\_players%  | Returns the amount of living players in the arena|
+|%mobarena_{arena}\_min-players%  | Returns the minimum amount of players needed for the arena to start|
+|%mobarena_{arena}\_max-players%  | Returns the max amount of players the arena can hold|
+|%mobarena_{arena}\_auto-start-timer%  | Returns the auto start timer in the arena (in seconds)|
+|%mobarena_{arena}\_status%  | Returns `EDITING` if the arena is in edit-mode, returns `RUNNING` if there are currently players in the arena, returns `ENABLED` if the arena is open, but no one is playing, returns `DISABLED` if the arena is disabled.
+|%mobarena_{arena}\_status-colored%  | Returns the status of the arena with some colors and formatting, just to make it look better.|
+|%mobarena_{arena}\_player-status%  | Returns the status of the player relative to the arena. Returns `§aPlaying` if the player is playing in the arena, returns `§cDead` if the player is dead (still didn't hit respawn), returns `§7Spectating` if the player is spectating the arena, and returns `§7Not playing` if the player isn't in the arena.|
 
