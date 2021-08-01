@@ -37,17 +37,17 @@ To use it, replace '{arena}' with the actual arena name! For example, `%mobarena
 
 | Placeholder  | Output|
 |------------- | -------------|
-|mapapi_{arena}\_name%  | Returns the arena name|
-|mapapi_{arena}\_wave%  | Returns the current arena wave number. Always starts at 1|
-|mapapi_{arena}\_final-wave%  | Returns the final wave in the arena. If not found, returns "∞"|
-|mapapi_{arena}\_remaining-mobs%  | Returns the amount of living mobs in the arena|
-|mapapi_{arena}\_ready%  | Returns the amount of players ready players in the arena|
-|mapapi_{arena}\_non-ready%  | Returns the amount of players who are _not_ ready yet|
-|mapapi_{arena}\_players%  | Returns the amount of living players in the arena|
-|mapapi_{arena}\_min-players%  | Returns the minimum amount of players needed for the arena to start|
-|mapapi_{arena}\_max-players%  | Returns the max amount of players the arena can hold|
-|mapapi_{arena}\_auto-start-timer%  | Returns the auto start timer in the arena (in seconds)|
-|mapapi_{arena}\_status%  | Returns `EDITING` if the arena is in edit-mode, returns `RUNNING` if there are currently players in the arena, returns `ENABLED` if the arena is open, but no one is playing, returns `DISABLED` if the arena is disabled.
-|mapapi_{arena}\_status-colored%  | Returns the status of the arena with some colors and formatting, just to make it look better.|
-|mapapi_{arena}\_player-status%  | Returns the status of the player relative to the arena. Returns `§aPlaying` if the player is playing in the arena, returns `§cDead` if the player is dead (still didn't hit respawn), returns `§7Spectating` if the player is spectating the arena, and returns `§7Not playing` if the player isn't in the arena.|
+|%mapapi_{arena}\_name%  | Returns the arena name|
+|%mapapi_{arena}\_wave%  | Returns the current arena wave number. Always starts at 1|
+|%mapapi_{arena}\_final-wave%  | Returns the final wave in the arena. If not found, returns "∞"|
+|%mapapi_{arena}\_remaining-mobs%  | Returns the amount of living mobs in the arena|
+|%mapapi_{arena}\_ready%  | Returns the amount of players ready players in the arena|
+|%mapapi_{arena}\_non-ready%  | Returns the amount of players who are _not_ ready yet|
+|%mapapi_{arena}\_players%  | Returns the amount of living players in the arena|
+|%mapapi_{arena}\_min-players%  | Returns the minimum amount of players needed for the arena to start|
+|%mapapi_{arena}\_max-players%  | Returns the max amount of players the arena can hold|
+|%mapapi_{arena}\_auto-start-timer%  | Returns the auto start timer in the arena (in seconds)|
+|%mapapi_{arena}\_status%  | Returns `EDITING` if the arena is in edit-mode, returns `RUNNING` if there are currently players in the arena, returns `ENABLED` if the arena is open, but no one is playing, returns `DISABLED` if the arena is disabled.
+|%mapapi_{arena}\_status-colored%  | Returns the status of the arena with some colors and formatting, just to make it look better.|
+|%mapapi_{arena}\_player-status%  | Returns the status of the player relative to the arena. Returns `§aPlaying` if the player is playing in the arena, returns `§cDead` if the player is dead (still didn't hit respawn), returns `§7Spectating` if the player is spectating the arena, and returns `§7Not playing` if the player isn't in the arena.|
 
