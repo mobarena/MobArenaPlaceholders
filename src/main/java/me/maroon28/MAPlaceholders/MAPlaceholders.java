@@ -4,6 +4,7 @@ import com.garbagemule.MobArena.framework.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.entity.Player;
 
 
 public class MAPlaceholders extends PlaceholderExpansion {
@@ -64,8 +65,15 @@ public class MAPlaceholders extends PlaceholderExpansion {
         return "";
     }
 
+    public boolean isValid(Arena arena, Player player) {
+        if (arena.inSpec((player)) || arena.getPlayersInLobby().contains(player)){
+            return false;
+        } else return true;
+    }
+
     @Override
     public String onRequest(OfflinePlayer player, String identifier) {
+
 
         final String[] args = identifier.split("\\_");
         final String arenaName = args[0];
@@ -86,8 +94,10 @@ public class MAPlaceholders extends PlaceholderExpansion {
 
         // check if the user is parsing player-arena
         if (identifier.contains("player-arena")) {
-            // Return an empty string if the player isn't in an arena, or if they're in the lobby
-            if (playerArena == null || playerArena.getPlayersInLobby().contains(player.getPlayer())) {
+            /* Return an empty string if the player isn't in an arena,
+            or if they're in the lobby,
+            or if they're a spectator */
+            if (playerArena == null || isValid(playerArena, player.getPlayer()) == false) {
                 return "";
             }
             // Player-Arena placeholders. E.G player-arena_{variable}
