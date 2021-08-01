@@ -32,7 +32,7 @@ public class MAPlaceholders extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "mobarena";
+        return "mapapi";
     }
 
     @Override
