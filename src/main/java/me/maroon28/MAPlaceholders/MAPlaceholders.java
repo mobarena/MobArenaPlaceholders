@@ -78,23 +78,26 @@ public class MAPlaceholders extends PlaceholderExpansion {
             return String.valueOf(mobArena.getArenaMaster().getAllPlayers().size());
         }
 
-        //player placeholders. I.E player-arena_ID
 
+        // get the arena the player is in.
         Arena playerArena = mobArena.getArenaMaster().getArenaWithPlayer(player.getName());
+        // get the arena from the given arguments
         Arena selectedArena = mobArena.getArenaMaster().getArenaWithName(arenaName);
 
-
-
+        // check if the user is parsing player-arena
         if (identifier.contains("player-arena")) {
+            // Return an empty string if the player isn't in an arena, or if they're in the lobby
             if (playerArena == null || playerArena.getPlayersInLobby().contains(player.getPlayer())) {
                 return "";
             }
+            // Player-Arena placeholders. E.G player-arena_{variable}
             switch (identifier) {
                 case "player-arena_name":
                     return playerArena.getSlug();
                 case "player-arena_wave":
                     return String.valueOf(playerArena.getWaveManager().getWaveNumber());
                 case "player-arena_final-wave": {
+                    // check if an arena has a final wave
                     if (playerArena.getWaveManager().getFinalWave() > 0) {
                         return String.valueOf(playerArena.getWaveManager().getFinalWave());
                     } else return "∞";
@@ -118,7 +121,8 @@ public class MAPlaceholders extends PlaceholderExpansion {
                     return String.valueOf(playerArena.getMaxPlayers());
                 case "player-arena_auto-start-timer": {
                     if (playerArena.getAutoStartTimer().isRunning()) {
-                        return String.valueOf(playerArena.getAutoStartTimer().getRemaining());
+                        // divide by 20 to convert from Ticks -> Seconds
+                        return String.valueOf(playerArena.getAutoStartTimer().getRemaining() / 20);
                     } else return "0";
                 }
                 case "player-arena_isready": {
