@@ -66,7 +66,7 @@ public class MAPlaceholders extends PlaceholderExpansion {
     }
 
     public boolean isValid(Arena arena, Player player) {
-        if (arena.inSpec((player)) || arena.getPlayersInLobby().contains(player)){
+        if (arena.inSpec((player)) || arena.getPlayersInLobby().contains(player) || arena.isDead(player)){
             return false;
         } else return true;
     }
