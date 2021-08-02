@@ -62,6 +62,7 @@ To use it, replace '{arena}' with the actual arena name! For example, `%mobarena
 This section requires you to install MobArenaStats. If it's not found on your server, all the placeholders below will return an empty string ("")! 
 
 ### Global Stats
+Returns the stats for all arenas
 
 | Placeholder  | Output |
 | ------------- | ------------- |
@@ -72,6 +73,8 @@ This section requires you to install MobArenaStats. If it's not found on your se
 | %mapapi_global_waves%  | Returns amount of waves played in every arena |
 
 ### Arena-Specific Stats
+Returns the stats for a specific arena. 
+
 | Placeholder  | Output |
 | ------------- | ------------- |
 | %mapapi_{arena}\_total-sessions%  | Returns combined amount of sessions played in the sepcific arena|
@@ -84,6 +87,8 @@ This section requires you to install MobArenaStats. If it's not found on your se
 | %mapapi_{arena}\_highest-seconds%  | Returns the highest duration survived in an arena|
 | %mapapi_{arena}\_highest-seconds-formatted%  | Same as above, but formatted as `HH:mm:ss`|
 
+## Player Stats
+Returns the total stats for a player 
 | Placeholder  | Output |
 | ------------- | ------------- |
 | %mapapi_player_total-sessions%  | Returns combined amount of sessions played by the player |
