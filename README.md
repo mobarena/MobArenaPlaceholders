@@ -9,6 +9,12 @@ PlaceholderAPI expansion for MobArena.
 ## Available Placeholders
 
 
+## Global Placeholders
+| Placeholder  | Output |
+| ------------- | ------------- |
+| %mapapi_total_enabled%  | Returns the amount of all enabled arenas on the server |
+| %mapapi_total_playing%  | Returns the amount of all players playing on every arena  |
+
 ### Player-Arena Placeholders
 
 These placeholders return the content for the arena the player is **currently** playing in. The player must be in a running arena for the placeholders to parse correctly. If they're not, then the placeholder will return "" instead of the actual value. I.E an empty string 
@@ -51,3 +57,37 @@ To use it, replace '{arena}' with the actual arena name! For example, `%mobarena
 |%mapapi_{arena}\_status-colored%  | Returns the status of the arena with some colors and formatting, just to make it look better.|
 |%mapapi_{arena}\_player-status%  | Returns the status of the player relative to the arena. Returns `§aPlaying` if the player is playing in the arena, returns `§cDead` if the player is dead (still didn't hit respawn), returns `§7Spectating` if the player is spectating the arena, and returns `§7Not playing` if the player isn't in the arena.|
 
+## Stats 
+
+This section requires you to install MobArenaStats. If it's not found on your server, all the placeholders below will return an empty string ("")! 
+
+### Global Stats
+
+| Placeholder  | Output |
+| ------------- | ------------- |
+| %mapapi_global_sessions%  | Returns combined amount of sessions played in all arenas |
+| %mapapi_global_seconds%  | Returns amount of seconds played in all arenas |
+| %mapapi_global_seconds-formatted%  | Same as above, but formats seconds into `HH:mm:ss` instead |
+| %mapapi_global_kills%  | Returns amount of kills made in every arena |
+| %mapapi_global_waves%  | Returns amount of waves played in every arena |
+
+### Arena-Specific Stats
+| Placeholder  | Output |
+| ------------- | ------------- |
+| %mapapi_{arena}\_total-sessions%  | Returns combined amount of sessions played in the sepcific arena|
+| %mapapi_{arena}\_total-seconds%  | Returns amount of seconds played |
+| %mapapi_{arena}\_total-seconds-formatted%  | Same as above, but formats seconds into `HH:mm:ss` instead |
+| %mapapi_{arena}\_total-kills%  | Returns amount of kills made in said arena |
+| %mapapi_{arena}\_total-waves%  | Returns amount of waves played in said arena |
+| %mapapi_{arena}\_highest-wave%  | Returns the highest wave reached in an arena |
+| %mapapi_{arena}\_highest-kills%  | Returns the highest amount of kills made in an arena|
+| %mapapi_{arena}\_highest-seconds%  | Returns the highest duration survived in an arena|
+| %mapapi_{arena}\_highest-seconds-formatted%  | Same as above, but formatted as `HH:mm:ss`|
+
+| Placeholder  | Output |
+| ------------- | ------------- |
+| %mapapi_player_total-sessions%  | Returns combined amount of sessions played by the player |
+| %mapapi_player_total-seconds%  | Returns amount of seconds played by the player |
+| %mapapi_player_total-seconds-formatted%  | Same as above, but formats seconds into `HH:mm:ss` instead |
+| %mapapi_player_total-kills%  | Returns amount of kills made in every arena by the player|
+| %mapapi_player_total-waves%  | Returns amount of waves played in every arena by the player |
