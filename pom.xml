@@ -41,6 +41,12 @@
     </dependencies>
 
     <repositories>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
@@ -51,10 +57,6 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
 
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <build>

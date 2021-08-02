@@ -1,10 +1,18 @@
 package me.maroon28.MAPlaceholders;
+
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.mobarena.stats.MobArenaStats;
+import org.mobarena.stats.MobArenaStatsPlugin;
+import org.mobarena.stats.store.ArenaStats;
+import org.mobarena.stats.store.GlobalStats;
+import org.mobarena.stats.store.PlayerStats;
+import org.mobarena.stats.store.StatsStore;
 
 
 public class MAPlaceholders extends PlaceholderExpansion {
@@ -40,52 +48,39 @@ public class MAPlaceholders extends PlaceholderExpansion {
         return "1.0.0";
     }
 
-    public String getArenaStatus(Arena arena, Boolean colored) {
-        if (colored == true) {
+    public String getArenaStatus(Arena arena) {
             if (arena.inEditMode()) {
-                return "§eEditing";
+                return "Editing";
             } else if (arena.isRunning()) {
-                return "§6Running";
+                return "Running";
             } else if (arena.isEnabled()) {
-                return "§aAvailable";
+                return "Available";
             } else if (!arena.isEnabled()) {
-                return "§cDisabled";
-            }
-        } else {
-            if (arena.inEditMode()) {
-                return "EDITING";
-            } else if (arena.isRunning()) {
-                return "RUNNING";
-            } else if (arena.isEnabled()) {
-                return "ENABLED";
-            } else if (!arena.isEnabled()) {
-                return "DISABLED";
-            } else return "null";
-        }
-        return "";
+                return "Disabled";
+            } else return "";
     }
 
     public boolean isValid(Arena arena, Player player) {
-        if (arena.inSpec((player)) || arena.getPlayersInLobby().contains(player) || arena.isDead(player)){
+        if (arena.inSpec((player)) ||
+                arena.getPlayersInLobby().contains(player) ||
+                arena.isDead(player)) {
             return false;
-        } else return true;
+        }
+        return true;
     }
 
     @Override
     public String onRequest(OfflinePlayer player, String identifier) {
 
-
         final String[] args = identifier.split("\\_");
         final String arenaName = args[0];
 
-        // global placeholders
-
+        // Global
         if (identifier.equalsIgnoreCase("total_enabled")) {
             return String.valueOf(mobArena.getArenaMaster().getEnabledArenas().size());
         } else if (identifier.equalsIgnoreCase("total_playing")) {
             return String.valueOf(mobArena.getArenaMaster().getAllPlayers().size());
         }
-
 
         // get the arena the player is in.
         Arena playerArena = mobArena.getArenaMaster().getArenaWithPlayer(player.getName());
@@ -94,10 +89,8 @@ public class MAPlaceholders extends PlaceholderExpansion {
 
         // check if the user is parsing player-arena
         if (identifier.contains("player-arena")) {
-            /* Return an empty string if the player isn't in an arena,
-            or if they're in the lobby,
-            or if they're a spectator */
-            if (playerArena == null || isValid(playerArena, player.getPlayer()) == false) {
+            // Return an empty string if the player isn't in a valid state
+            if (playerArena == null || !isValid(playerArena, player.getPlayer())) {
                 return "";
             }
             // Player-Arena placeholders. E.G player-arena_{variable}
@@ -137,10 +130,10 @@ public class MAPlaceholders extends PlaceholderExpansion {
                 }
                 case "player-arena_isready": {
                     if (playerArena.getReadyPlayersInLobby().contains(player.getPlayer()))
-                        return "§aReady";
+                        return "Ready";
                     else if (!playerArena.getReadyPlayersInLobby().contains(player.getPlayer()))
-                        return "§cNot Ready";
-                    else return "§aPlaying";
+                        return "Not Ready";
+                    else return "Playing";
                 }
                 default:
                     return "PNF";
@@ -181,21 +174,80 @@ public class MAPlaceholders extends PlaceholderExpansion {
                 }
                 case "player-status": {
                     if (selectedArena.isDead(player.getPlayer())) {
-                        return "§cDead";
+                        return "Dead";
                     } else if (selectedArena.inSpec(player.getPlayer())) {
-                        return "§7Spectating";
+                        return "Spectating";
                     } else if (selectedArena.getPlayersInArena().contains(player.getPlayer())) {
-                        return "§aPlaying";
-                    } else return "§7Not Playing";
+                        return "Playing";
+                    } else return "Not Playing";
                 }
                 case "status": {
-                    return getArenaStatus(selectedArena, false);
-                }
-                case "status-colored": {
-                    return getArenaStatus(selectedArena, true);
+                    return getArenaStatus(selectedArena);
                 }
             }
         }
-        return null;
+
+        // Stats start.
+        if (Bukkit.getPluginManager().getPlugin("MobArenaStats") == null) {
+            return "";
+        } else {
+            MobArenaStats plugin = MobArenaStatsPlugin.getInstance();
+            StatsStore store = plugin.getStatsStore();
+
+            ArenaStats arenaStats = store.getArenaStats(arenaName);
+            GlobalStats globalStats = store.getGlobalStats();
+            PlayerStats playerStats = store.getPlayerStats(player.getName());
+
+            switch (identifier) {
+                // Global stats
+                case "global_sessions":
+                    return Integer.toString(globalStats.totalSessions);
+                case "global_seconds":
+                    return Long.toString(globalStats.totalSeconds);
+                case "global_seconds-formatted":
+                    return DurationFormatUtils.formatDuration(globalStats.totalSeconds * 1000L, "HH:mm:ss", true);
+                case "global_kills":
+                    return Long.toString(globalStats.totalKills);
+                case "global_waves":
+                    return Long.toString(globalStats.totalWaves);
+                // Player Stats
+                case "player_total-sessions":
+                    return Integer.toString(playerStats.totalSessions);
+                case "player_total-kills":
+                    return Long.toString(playerStats.totalKills);
+                case "player_total-seconds":
+                    return Long.toString(playerStats.totalSeconds);
+                case "player_total-seconds-formatted":
+                    return DurationFormatUtils.formatDuration(playerStats.totalSeconds * 1000L, "HH:mm:ss", true);
+                case "player_total-waves":
+                    return Long.toString(playerStats.totalWaves);
+            }
+
+            // arenaName_stat
+            if (args.length == 2) {
+                final String param = args[1];
+                switch (param) {
+                    case "highest-wave":
+                        return Integer.toString(arenaStats.highestWave);
+                    case "highest-kills":
+                        return Integer.toString(arenaStats.highestKills);
+                    case "highest-seconds":
+                        return Integer.toString(arenaStats.highestSeconds);
+                    case "highest-seconds-formatted":
+                        return DurationFormatUtils.formatDuration(arenaStats.highestSeconds * 1000L, "HH:mm:ss", true);
+                    case "total-kills":
+                        return Long.toString(arenaStats.totalKills);
+                    case "total-waves":
+                        return Long.toString(arenaStats.totalWaves);
+                    case "total-sessions":
+                        return Integer.toString(arenaStats.totalSessions);
+                    case "total-seconds":
+                        return Long.toString(arenaStats.totalSeconds);
+                    case "total-seconds-formatted":
+                        return DurationFormatUtils.formatDuration(arenaStats.totalSeconds * 1000L, "HH:mm:ss", true);
+                }
+            }
+        }
+        return null; // Placeholder not recognized
     }
 }
