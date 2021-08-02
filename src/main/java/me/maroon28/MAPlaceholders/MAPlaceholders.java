@@ -2,6 +2,7 @@ package me.maroon28.MAPlaceholders;
 
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
+import me.clip.placeholderapi.expansion.Configurable;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -13,6 +14,9 @@ import org.mobarena.stats.store.ArenaStats;
 import org.mobarena.stats.store.GlobalStats;
 import org.mobarena.stats.store.PlayerStats;
 import org.mobarena.stats.store.StatsStore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MAPlaceholders extends PlaceholderExpansion {
@@ -48,25 +52,40 @@ public class MAPlaceholders extends PlaceholderExpansion {
         return "1.0.0";
     }
 
-    public String getArenaStatus(Arena arena) {
+    public String getArenaStatus(Arena arena, Boolean colored) {
+        if (colored) {
             if (arena.inEditMode()) {
-                return "Editing";
+                return "&eEditing";
             } else if (arena.isRunning()) {
-                return "Running";
+                return "&6Running";
             } else if (arena.isEnabled()) {
-                return "Available";
+                return "&aAvailable";
             } else if (!arena.isEnabled()) {
-                return "Disabled";
-            } else return "";
+                return "&cDisabled";
+            } else {
+                return "";
+            }
+        }
+        if (arena.inEditMode()) {
+            return "Editing";
+        } else if (arena.isRunning()) {
+            return "Running";
+        } else if (arena.isEnabled()) {
+            return "Available";
+        } else if (!arena.isEnabled()) {
+            return "Disabled";
+        } else {
+            return "";
+        }
     }
 
     public boolean isValid(Arena arena, Player player) {
-        if (arena.inSpec((player)) ||
-                arena.getPlayersInLobby().contains(player) ||
-                arena.isDead(player)) {
-            return false;
+        if (!arena.inSpec((player)) &&
+                !arena.getPlayersInLobby().contains(player) &&
+                !arena.isDead(player)) {
+            return true;
         }
-        return true;
+        else return false;
     }
 
     @Override
@@ -181,9 +200,10 @@ public class MAPlaceholders extends PlaceholderExpansion {
                         return "Playing";
                     } else return "Not Playing";
                 }
-                case "status": {
-                    return getArenaStatus(selectedArena);
-                }
+                case "status":
+                    return getArenaStatus(selectedArena, false);
+                case "status-colored":
+                    return getArenaStatus(selectedArena, true);
             }
         }
 
@@ -250,4 +270,5 @@ public class MAPlaceholders extends PlaceholderExpansion {
         }
         return null; // Placeholder not recognized
     }
+
 }
