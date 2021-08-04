@@ -1,0 +1,14 @@
+# Java Files
+*.class
+
+# Maven Files
+target/
+
+# Artifacts
+*.jar
+*.zip
+
+# IntelliJ Files
+.idea/
+*.iml
+out/
