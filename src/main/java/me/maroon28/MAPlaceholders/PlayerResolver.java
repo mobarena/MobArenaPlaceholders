@@ -15,7 +15,7 @@ public class PlayerResolver {
 
     boolean isValid(Arena arena, OfflinePlayer player) {
         return !arena.inSpec(player.getPlayer())
-                && !arena.getPlayersInLobby().contains(player)
+                && !arena.inLobby(player.getPlayer())
                 && !arena.isDead(player.getPlayer());
     }
 
@@ -28,7 +28,7 @@ public class PlayerResolver {
         ArenaPlayerStatistics currentStats = arena.getArenaPlayer(player.getPlayer()).getStats();
         switch (tail) {
             case "class": {
-                return String.valueOf(arena.getArenaPlayer(player.getPlayer()).getArenaClass().getConfigName());
+                return arena.getArenaPlayer(player.getPlayer()).getArenaClass().getConfigName();
             }
             case "kills": {
                 return String.valueOf(currentStats.getInt("kills"));
