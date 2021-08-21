@@ -58,7 +58,7 @@ import org.bukkit.OfflinePlayer;
                 return getArenaStatus(arena);
             }
             default: {
-                return "";
+                return null;
             }
         }
     }

@@ -52,10 +52,10 @@ public class PlayerResolver {
                     return String.valueOf(currentStats.getInt("lastWave"));
                 }
                 default: {
-                    return "";
+                    return null;
                 }
             }
         }
-        return "";
+        return null;
      }
 }

@@ -62,7 +62,7 @@ public class MobArenaPlaceholders extends PlaceholderExpansion {
                 return statsResolver.resolve(player, tail);
             }
             default: {
-                return "";
+                return null;
             }
         }
     }

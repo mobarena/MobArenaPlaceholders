@@ -36,7 +36,7 @@ public class StatsResolver {
                 }
             }
         }
-        return "";
+        return null;
     }
 
     private String resolveArenaStat(OfflinePlayer player, String rest) {
@@ -71,7 +71,7 @@ public class StatsResolver {
                 return String.valueOf(stats.highestSeconds);
             }
             default: {
-                return "";
+                return null;
             }
         }
     }
@@ -95,7 +95,7 @@ public class StatsResolver {
                 return String.valueOf(stats.totalSessions);
             }
             default: {
-                return "";
+                return null;
             }
         }
     }
@@ -119,7 +119,7 @@ public class StatsResolver {
                 return String.valueOf(stats.totalSessions);
             }
         }
-        return "";
+        return null;
     }
 
     private Arena getArenaByKey(OfflinePlayer player, String key) {
