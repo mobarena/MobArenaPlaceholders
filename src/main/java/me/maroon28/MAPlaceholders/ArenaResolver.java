@@ -1,50 +1,40 @@
 package me.maroon28.MAPlaceholders;
 
-import com.garbagemule.MobArena.ArenaPlayerStatistics;
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
 
-public class ArenaResolver {
+ class ArenaResolver {
 
     private final MobArena mobarena;
 
-    public ArenaResolver(MobArena mobarena) {
+    ArenaResolver(MobArena mobarena) {
         this.mobarena = mobarena;
     }
 
-    public String getArenaStatus(Arena arena) {
-        if (arena.inEditMode()) {
-            return "Editing";
-        } else if (arena.isRunning()) {
-            return "Running";
-        } else if (arena.isEnabled()) {
-            return "Available";
-        } else if (!arena.isEnabled()) {
-            return "Disabled";
-        } else {
-            return "";
-        }
-    }
 
-    public String resolve(OfflinePlayer player, String rest) {
+     String resolve(OfflinePlayer player, String rest) {
         String[] parts = rest.split("_", 2);
         String head = parts[0];
         String tail = (parts.length > 1) ? parts[1] : null;
         Arena arena = getArenaByKey(player, head);
-        if (arena == null) {
+        if (tail == null || arena == null) {
             return "";
         }
         switch (tail) {
             case "wave": {
-                return String.valueOf(arena.getWaveManager().getWaveNumber());
+                if (arena.getWaveManager().getFinalWave() > 0) {
+                    return String.valueOf(arena.getWaveManager().getWaveNumber());
+                } else {
+                    return "∞";
+                }
             }
             case "final-wave": {
                 return String.valueOf(arena.getWaveManager().getFinalWave());
             }
             case "remaining-mobs": {
-                return String.valueOf(arena.getMonsterManager().getMonsters());
+                return String.valueOf(arena.getMonsterManager().getMonsters().size());
             }
             case "ready": {
                 return String.valueOf(arena.getReadyPlayersInLobby().size());
@@ -53,7 +43,7 @@ public class ArenaResolver {
                 return String.valueOf(arena.getNonreadyPlayers().size());
             }
             case "players": {
-                return String.valueOf(arena.getPlayerCount());
+                return String.valueOf(arena.getArenaPlayerSet().size());
             }
             case "min-players": {
                 return String.valueOf(arena.getMinPlayers());
@@ -81,4 +71,18 @@ public class ArenaResolver {
             return am.getArenaWithName(key);
         }
     }
+
+    private String getArenaStatus(Arena arena) {
+         if (arena.inEditMode()) {
+             return "Editing";
+         } else if (arena.isRunning()) {
+             return "Running";
+         } else if (arena.isEnabled()) {
+             return "Available";
+         } else if (!arena.isEnabled()) {
+             return "Disabled";
+         } else {
+             return "";
+         }
+     }
 }

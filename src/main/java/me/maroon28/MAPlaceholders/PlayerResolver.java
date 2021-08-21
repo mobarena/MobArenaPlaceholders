@@ -9,48 +9,53 @@ public class PlayerResolver {
 
     private final MobArena mobarena;
 
-    public PlayerResolver(MobArena mobarena) {
+    PlayerResolver(MobArena mobarena) {
         this.mobarena = mobarena;
     }
 
-    boolean isValid(Arena arena, OfflinePlayer player) {
-        return !arena.inSpec(player.getPlayer())
-                && !arena.inLobby(player.getPlayer())
-                && !arena.isDead(player.getPlayer());
-    }
+    String resolve(OfflinePlayer target, String tail) {
+        if (target == null || !target.isOnline()) {
+            return null;
+        }
 
-    public String resolvePlayerPlaceholder(OfflinePlayer player, String tail) {
+        OfflinePlayer player = target.getPlayer();
         Arena arena = mobarena.getArenaMaster().getArenaWithPlayer(player.getPlayer());
-        if (arena == null || !isValid(arena, player)) {
+        if (arena == null || !arena.inArena(player.getPlayer())) {
             return "";
         }
 
-        ArenaPlayerStatistics currentStats = arena.getArenaPlayer(player.getPlayer()).getStats();
-        switch (tail) {
-            case "class": {
-                return arena.getArenaPlayer(player.getPlayer()).getArenaClass().getConfigName();
-            }
-            case "kills": {
-                return String.valueOf(currentStats.getInt("kills"));
-            }
-            case "damage-done": {
-                return String.valueOf(currentStats.getInt("dmgDone"));
-            }
-            case "damage-taken": {
-                return String.valueOf(currentStats.getInt("dmgTaken"));
-            }
-            case "swings": {
-                return String.valueOf(currentStats.getInt("swings"));
-            }
-            case "hits": {
-                return String.valueOf(currentStats.getInt("hits"));
-            }
-            case "last-wave": {
-                return String.valueOf(currentStats.getInt("lastWave"));
-            }
-            default: {
+        if (player.getPlayer() != null) {
+            ArenaPlayerStatistics currentStats = arena.getArenaPlayer(player.getPlayer()).getStats();
+            if (tail == null) {
                 return "";
             }
+            switch (tail) {
+                case "class": {
+                    return currentStats.getClassName();
+                }
+                case "kills": {
+                    return String.valueOf(currentStats.getInt("kills"));
+                }
+                case "damage-done": {
+                    return String.valueOf(currentStats.getInt("dmgDone"));
+                }
+                case "damage-taken": {
+                    return String.valueOf(currentStats.getInt("dmgTaken"));
+                }
+                case "swings": {
+                    return String.valueOf(currentStats.getInt("swings"));
+                }
+                case "hits": {
+                    return String.valueOf(currentStats.getInt("hits"));
+                }
+                case "last-wave": {
+                    return String.valueOf(currentStats.getInt("lastWave"));
+                }
+                default: {
+                    return "";
+                }
+            }
         }
+        return "";
      }
 }
