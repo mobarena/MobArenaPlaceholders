@@ -24,16 +24,15 @@ import org.bukkit.OfflinePlayer;
         }
         switch (tail) {
             case "wave": {
+                return String.valueOf(arena.getWaveManager().getWaveNumber());
+            }
+            case "final-wave": {
                 if (arena.getWaveManager().getFinalWave() > 0) {
                     return String.valueOf(arena.getWaveManager().getWaveNumber());
                 } else {
                     return "∞";
-                }
-            }
-            case "final-wave": {
-                return String.valueOf(arena.getWaveManager().getFinalWave());
-            }
-            case "remaining-mobs": {
+                }            }
+            case "living-mobs": {
                 return String.valueOf(arena.getMonsterManager().getMonsters().size());
             }
             case "ready": {
