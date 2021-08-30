@@ -51,7 +51,7 @@ import org.bukkit.OfflinePlayer;
                 return String.valueOf(arena.getMaxPlayers());
             }
             case "auto-start-timer": {
-                return String.valueOf(arena.getAutoStartTimer());
+                return String.valueOf(arena.getAutoStartTimer().getRemaining() / 20);
             }
             case "status": {
                 return getArenaStatus(arena);
