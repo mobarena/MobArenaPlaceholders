@@ -1,4 +1,4 @@
-package me.maroon28.MAPlaceholders;
+package org.mobarena.MAPlaceholders;
 
 import com.garbagemule.MobArena.MobArena;
 import me.clip.placeholderapi.expansion.Configurable;
@@ -21,12 +21,12 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
 
     @Override
     public String getAuthor() {
-        return "Maroon28, garbagemule";
+        return "Maroon28";
     }
 
     @Override
     public String getIdentifier() {
-        return "mapapi";
+        return "mobarena";
     }
 
     @Override

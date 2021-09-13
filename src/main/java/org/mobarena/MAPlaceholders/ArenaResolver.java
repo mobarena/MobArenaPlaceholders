@@ -1,4 +1,4 @@
-package me.maroon28.MAPlaceholders;
+package org.mobarena.MAPlaceholders;
 
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
