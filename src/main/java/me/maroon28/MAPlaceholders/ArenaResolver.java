@@ -26,7 +26,7 @@ class ArenaResolver {
             return "";
         }
         switch (tail) {
-            case "wave": {
+            case "current-wave": {
                 return String.valueOf(arena.getWaveManager().getWaveNumber());
             }
             case "final-wave": {
@@ -36,16 +36,16 @@ class ArenaResolver {
                     return "∞";
                 }
             }
-            case "living-mobs": {
+            case "live-mobs": {
                 return String.valueOf(arena.getMonsterManager().getMonsters().size());
             }
-            case "ready": {
+            case "ready-players": {
                 return String.valueOf(arena.getReadyPlayersInLobby().size());
             }
             case "non-ready": {
                 return String.valueOf(arena.getNonreadyPlayers().size());
             }
-            case "players": {
+            case "live-players": {
                 return String.valueOf(arena.getArenaPlayerSet().size());
             }
             case "min-players": {
