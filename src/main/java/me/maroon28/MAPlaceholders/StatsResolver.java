@@ -79,7 +79,7 @@ public class StatsResolver {
     private String resolveGlobalStat(String key) {
         GlobalStats stats = mastats.getStatsStore().getGlobalStats();
         if (key == null) {
-            return "";
+            return null;
         }
         switch (key) {
             case "total-kills": {
@@ -103,7 +103,7 @@ public class StatsResolver {
     private String resolvePlayerStat(OfflinePlayer player, String key) {
         PlayerStats stats = mastats.getStatsStore().getPlayerStats(player.getName());
         if (key == null) {
-            return "";
+            return null;
         }
         switch (key) {
             case "total-kills": {

@@ -27,7 +27,7 @@ public class PlayerResolver {
         if (player.getPlayer() != null) {
             ArenaPlayerStatistics currentStats = arena.getArenaPlayer(player.getPlayer()).getStats();
             if (tail == null) {
-                return "";
+                return null;
             }
             switch (tail) {
                 case "class": {
