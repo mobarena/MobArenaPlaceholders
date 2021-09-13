@@ -42,9 +42,6 @@ class ArenaResolver {
             case "ready-players": {
                 return String.valueOf(arena.getReadyPlayersInLobby().size());
             }
-            case "non-ready": {
-                return String.valueOf(arena.getNonreadyPlayers().size());
-            }
             case "live-players": {
                 return String.valueOf(arena.getArenaPlayerSet().size());
             }
@@ -57,8 +54,8 @@ class ArenaResolver {
             case "auto-start-timer": {
                 return String.valueOf(arena.getAutoStartTimer().getRemaining() / 20);
             }
-            case "status": {
-                return getArenaStatus(arena);
+            case "state": {
+                return getArenaState(arena);
             }
             default: {
                 return null;
@@ -75,7 +72,7 @@ class ArenaResolver {
         }
     }
 
-    private String getArenaStatus(Arena arena) {
+    private String getArenaState(Arena arena) {
          if (arena.inEditMode()) {
              return config.getString("editing", "Editing");
          } else if (arena.isRunning()) {
