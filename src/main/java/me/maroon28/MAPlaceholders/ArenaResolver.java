@@ -43,7 +43,16 @@ class ArenaResolver {
                 return String.valueOf(arena.getReadyPlayersInLobby().size());
             }
             case "live-players": {
-                return String.valueOf(arena.getArenaPlayerSet().size());
+                return String.valueOf(arena.getPlayersInArena().size());
+            }
+            case "dead-players": {
+                return String.valueOf((arena.getPlayerCount() - arena.getPlayersInArena().size()));
+            }
+            case "initial-players": {
+                return String.valueOf(arena.getPlayerCount());
+            }
+            case "lobby-players": {
+                return String.valueOf(arena.getPlayersInLobby().size());
             }
             case "min-players": {
                 return String.valueOf(arena.getMinPlayers());
