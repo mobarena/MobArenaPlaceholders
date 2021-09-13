@@ -1,6 +1,7 @@
 package me.maroon28.MAPlaceholders;
 
 import com.garbagemule.MobArena.MobArena;
+import me.clip.placeholderapi.expansion.Configurable;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -9,7 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import org.mobarena.stats.MobArenaStats;
 import org.mobarena.stats.MobArenaStatsPlugin;
 
-public class MobArenaPlaceholders extends PlaceholderExpansion {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MobArenaPlaceholders extends PlaceholderExpansion implements Configurable {
 
     private ArenaResolver arenaResolver;
     private PlayerResolver playerResolver;
@@ -36,11 +40,21 @@ public class MobArenaPlaceholders extends PlaceholderExpansion {
     }
 
     @Override
+    public Map<String, Object> getDefaults() {
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put("editing", "Editing");
+        defaults.put("available", "Available");
+        defaults.put("disabled", "Disabled");
+        defaults.put("running", "Running");
+        return defaults;
+    }
+
+    @Override
     public boolean register() {
         PluginManager manager = Bukkit.getPluginManager();
         MobArena mobarena = (MobArena) manager.getPlugin(getRequiredPlugin());
         MobArenaStats mastats = (MobArenaStatsPlugin) manager.getPlugin("MobArenaStats");
-        arenaResolver = new ArenaResolver(mobarena);
+        arenaResolver = new ArenaResolver(mobarena, getConfigSection());
         playerResolver = new PlayerResolver(mobarena);
         statsResolver = new StatsResolver(mobarena, mastats);
         return super.register();

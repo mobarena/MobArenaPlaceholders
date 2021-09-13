@@ -4,13 +4,16 @@ import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 
- class ArenaResolver {
+class ArenaResolver {
 
     private final MobArena mobarena;
+    private final ConfigurationSection config;
 
-    ArenaResolver(MobArena mobarena) {
+    ArenaResolver(MobArena mobarena, ConfigurationSection config) {
         this.mobarena = mobarena;
+        this.config = config;
     }
 
 
@@ -31,7 +34,8 @@ import org.bukkit.OfflinePlayer;
                     return String.valueOf(arena.getWaveManager().getWaveNumber());
                 } else {
                     return "∞";
-                }            }
+                }
+            }
             case "living-mobs": {
                 return String.valueOf(arena.getMonsterManager().getMonsters().size());
             }
@@ -73,13 +77,13 @@ import org.bukkit.OfflinePlayer;
 
     private String getArenaStatus(Arena arena) {
          if (arena.inEditMode()) {
-             return "Editing";
+             return config.getString("editing", "Editing");
          } else if (arena.isRunning()) {
-             return "Running";
+             return config.getString("running", "Running");
          } else if (arena.isEnabled()) {
-             return "Available";
+             return config.getString("available", "Available");
          } else if (!arena.isEnabled()) {
-             return "Disabled";
+             return config.getString("disabled", "Disabled");
          } else {
              return "";
          }
