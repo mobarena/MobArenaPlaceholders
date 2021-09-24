@@ -17,7 +17,7 @@ class ArenaResolver {
     }
 
 
-     String resolve(OfflinePlayer player, String rest) {
+    String resolve(OfflinePlayer player, String rest) {
         String[] parts = rest.split("_", 2);
         String head = parts[0];
         String tail = (parts.length > 1) ? parts[1] : null;
@@ -46,9 +46,15 @@ class ArenaResolver {
                 return String.valueOf(arena.getPlayersInArena().size());
             }
             case "dead-players": {
+                if (!arena.isRunning()) {
+                    return "0";
+                }
                 return String.valueOf((arena.getPlayerCount() - arena.getPlayersInArena().size()));
             }
             case "initial-players": {
+                if (!arena.isRunning()) {
+                    return "0";
+                }
                 return String.valueOf(arena.getPlayerCount());
             }
             case "lobby-players": {
@@ -82,16 +88,16 @@ class ArenaResolver {
     }
 
     private String getArenaState(Arena arena) {
-         if (arena.inEditMode()) {
-             return config.getString("editing", "Editing");
-         } else if (arena.isRunning()) {
-             return config.getString("running", "Running");
-         } else if (arena.isEnabled()) {
-             return config.getString("available", "Available");
-         } else if (!arena.isEnabled()) {
-             return config.getString("disabled", "Disabled");
-         } else {
-             return "";
-         }
-     }
+        if (arena.inEditMode()) {
+            return config.getString("editing");
+        } else if (arena.isRunning()) {
+            return config.getString("running");
+        } else if (arena.isEnabled()) {
+            return config.getString("available");
+        } else if (!arena.isEnabled()) {
+            return config.getString("disabled");
+        } else {
+            return "";
+        }
+    }
 }
