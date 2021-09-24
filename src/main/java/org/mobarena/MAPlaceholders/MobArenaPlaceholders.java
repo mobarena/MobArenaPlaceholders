@@ -51,13 +51,16 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
 
     @Override
     public boolean register() {
+        if (!super.register()) {
+            return false;
+        }
         PluginManager manager = Bukkit.getPluginManager();
         MobArena mobarena = (MobArena) manager.getPlugin(getRequiredPlugin());
         MobArenaStats mastats = (MobArenaStatsPlugin) manager.getPlugin("MobArenaStats");
         arenaResolver = new ArenaResolver(mobarena, getConfigSection());
         playerResolver = new PlayerResolver(mobarena);
         statsResolver = new StatsResolver(mobarena, mastats);
-        return super.register();
+        return true;
     }
 
     @Override
