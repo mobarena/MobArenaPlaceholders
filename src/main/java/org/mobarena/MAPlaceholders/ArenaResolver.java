@@ -31,7 +31,7 @@ class ArenaResolver {
             }
             case "final-wave": {
                 if (arena.getWaveManager().getFinalWave() > 0) {
-                    return String.valueOf(arena.getWaveManager().getWaveNumber());
+                    return String.valueOf(arena.getWaveManager().getFinalWave());
                 } else {
                     return "∞";
                 }
