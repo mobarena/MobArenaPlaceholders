@@ -5,9 +5,9 @@ import me.clip.placeholderapi.expansion.Configurable;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
-import org.mobarena.stats.MobArenaStats;
 import org.mobarena.stats.MobArenaStatsPlugin;
 
 import java.util.HashMap;
@@ -55,11 +55,17 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
             return false;
         }
         PluginManager manager = Bukkit.getPluginManager();
-        MobArena mobarena = (MobArena) manager.getPlugin(getRequiredPlugin());
-        MobArenaStats mastats = (MobArenaStatsPlugin) manager.getPlugin("MobArenaStats");
-        arenaResolver = new ArenaResolver(mobarena, getConfigSection());
-        playerResolver = new PlayerResolver(mobarena);
-        statsResolver = new StatsResolver(mobarena, mastats);
+        Plugin mobarena = manager.getPlugin(getRequiredPlugin());
+        Plugin mastats = manager.getPlugin("MobArenaStats");
+        if (mobarena == null) {
+            return false;
+        }
+        // Casts :(
+        arenaResolver = new ArenaResolver((MobArena) mobarena, getConfigSection());
+        playerResolver = new PlayerResolver((MobArena) mobarena);
+        if (mastats != null) {
+            statsResolver = new StatsResolver((MobArena) mobarena, (MobArenaStatsPlugin) mastats);
+        }
         return true;
     }
 
@@ -76,7 +82,10 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
                 return playerResolver.resolve(player, tail);
             }
             case "stats": {
-                return statsResolver.resolve(player, tail);
+                if (statsResolver != null) {
+                    return statsResolver.resolve(player, tail);
+                }
+                return "MobArenaStats could not be found! Please download and install it first!";
             }
             default: {
                 return null;
