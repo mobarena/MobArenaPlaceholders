@@ -65,13 +65,13 @@ Returns the stats for a specific arena.
 
 | Placeholder  | Output |
 | ------------- | ------------- |
-| %mobarena_stats_{arena}\_total-sessions%  | Returns combined amount of sessions played in the sepcific arena|
-| %mobarena_stats_{arena}\_total-seconds%  | Returns amount of seconds played |
-| %mobarena_stats_{arena}\_total-kills%  | Returns amount of kills made in said arena |
-| %mobarena_stats_{arena}\_total-waves%  | Returns amount of waves played in said arena |
-| %mobarena_stats_{arena}\_highest-wave%  | Returns the highest wave reached in an arena |
-| %mobarena_stats_{arena}\_highest-kills%  | Returns the highest amount of kills made in an arena|
-| %mobarena_stats_{arena}\_highest-seconds%  | Returns the highest duration survived in an arena|
+| %mobarena_stats_arena_{arena}\_total-sessions%  | Returns combined amount of sessions played in the sepcific arena|
+| %mobarena_stats_arena_{arena}\_total-seconds%  | Returns amount of seconds played |
+| %mobarena_stats_arena_{arena}\_total-kills%  | Returns amount of kills made in said arena |
+| %mobarena_stats_arena_{arena}\_total-waves%  | Returns amount of waves played in said arena |
+| %mobarena_stats_arena_{arena}\_highest-wave%  | Returns the highest wave reached in an arena |
+| %mobarena_stats_arena_{arena}\_highest-kills%  | Returns the highest amount of kills made in an arena|
+| %mobarena_stats_arena_{arena}\_highest-seconds%  | Returns the highest duration survived in an arena|
 
 ## Player Stats
 Returns the total stats for a player 
