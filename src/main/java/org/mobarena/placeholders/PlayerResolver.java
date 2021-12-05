@@ -57,5 +57,5 @@ public class PlayerResolver {
             }
         }
         return null;
-     }
+    }
 }

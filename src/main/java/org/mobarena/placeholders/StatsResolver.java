@@ -14,12 +14,12 @@ public class StatsResolver {
     private final MobArena mobarena;
     private final MobArenaStats mastats;
 
-     StatsResolver(MobArena mobarena, MobArenaStats mastats) {
+    StatsResolver(MobArena mobarena, MobArenaStats mastats) {
         this.mobarena = mobarena;
         this.mastats = mastats;
     }
 
-     String resolve(OfflinePlayer player, String rest) {
+    String resolve(OfflinePlayer player, String rest) {
         String[] parts = rest.split("_", 2);
         String head = parts[0];
         String tail = (parts.length > 1) ? parts[1] : null;

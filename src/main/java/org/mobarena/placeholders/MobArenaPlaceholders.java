@@ -34,7 +34,8 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
         return "1.0.0";
     }
 
-    @Override @NotNull
+    @Override
+    @NotNull
     public String getRequiredPlugin() {
         return "MobArena";
     }
