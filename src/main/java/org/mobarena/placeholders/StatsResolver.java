@@ -1,4 +1,4 @@
-package org.mobarena.MAPlaceholders;
+package org.mobarena.placeholders;
 
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
