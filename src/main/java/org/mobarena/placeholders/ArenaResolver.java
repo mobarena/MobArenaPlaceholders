@@ -72,6 +72,9 @@ class ArenaResolver {
             case "state": {
                 return getArenaState(arena);
             }
+            case "name": {
+                return arena.getSlug();
+            }
             default: {
                 return null;
             }
