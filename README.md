@@ -27,6 +27,7 @@ To use it, replace '{arena}' with the actual arena name! For example, `%mobarena
 |%mobarena_arena_{arena}\_min-players%  | Returns the minimum amount of players needed for the arena to start|
 |%mobarena_arena_{arena}\_max-players%  | Returns the max amount of players the arena can hold|
 |%mobarena_arena_{arena}\_auto-start-timer%  | Returns the auto start timer in the arena (in seconds)|
+|%mobarena_arena_{arena}\_name%  | Returns the arena slug (name)|
 |%mobarena_arena_{arena}\_state%  | Returns `Editing` if the arena is in edit-mode, returns `Running` if there are currently players in the arena, returns `Enabled` if the arena is open, but no one is playing, returns `Disabled` if the arena is disabled. **All Strings are configurable!** You can just take a look at placeholderapi's config file to find the configurations!
 
 ## Player placeholders
