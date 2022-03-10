@@ -1,10 +1,12 @@
 # Installation
 PlaceholderAPI expansion for MobArena.
 
-1. Download the latest stable release on the right.
-2. Upload the jar to plugins/PlaceholderAPI/expansions
-3. Run `/papi reload`
-4. And that's it! Have fun!
+1. Download the latest *dev build* of MobArena from [here](https://github.com/garbagemule/MobArena/actions)
+2. Download the latest release of MobArenaStats from [here](https://github.com/mobarena/MobArenaStats)
+3. Download the latest release of MobArenaPlaceholders on the right.
+4. Upload the MobArenaPlaceholders jar to `plugins/PlaceholderAPI/expansions`
+5. Run `/papi reload`
+6. And that's it! Have fun!
 
 ## Available Placeholders
 
