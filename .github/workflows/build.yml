@@ -1,0 +1,33 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build, test, package
+        run: ./mvnw -B package --file pom.xml
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: MobArenaPlaceholders.jar
+          path: target/MobArenaPlaceholders.jar
