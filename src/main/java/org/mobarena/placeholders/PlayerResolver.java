@@ -15,6 +15,11 @@ public class PlayerResolver {
     }
 
     String resolve(OfflinePlayer target, String tail) {
+        // mobarena_player is invalid
+        if (tail == null) {
+            return null;
+        }
+
         if (target == null || !target.isOnline()) {
             return null;
         }
@@ -27,9 +32,6 @@ public class PlayerResolver {
 
         if (player.getPlayer() != null) {
             ArenaPlayerStatistics currentStats = arena.getArenaPlayer(player.getPlayer()).getStats();
-            if (tail == null) {
-                return null;
-            }
             switch (tail) {
                 case "class": {
                     return currentStats.getClassName();

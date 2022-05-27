@@ -21,6 +21,10 @@ public class StatsResolver {
     }
 
     String resolve(OfflinePlayer player, String rest) {
+        // mobarena_stats is invalid
+        if (rest == null) {
+            return null;
+        }
         String[] parts = rest.split("_", 2);
         String head = parts[0];
         String tail = (parts.length > 1) ? parts[1] : null;
