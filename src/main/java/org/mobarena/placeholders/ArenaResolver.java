@@ -5,14 +5,15 @@ import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 
 class ArenaResolver {
 
     private final MobArena mobarena;
     private final ConfigurationSection config;
 
-    ArenaResolver(MobArena mobarena, ConfigurationSection config) {
-        this.mobarena = mobarena;
+    ArenaResolver(Plugin mobarena, ConfigurationSection config) {
+        this.mobarena = (MobArena) mobarena;
         this.config = config;
     }
 

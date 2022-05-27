@@ -1,6 +1,5 @@
 package org.mobarena.placeholders;
 
-import com.garbagemule.MobArena.MobArena;
 import me.clip.placeholderapi.expansion.Configurable;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
@@ -8,7 +7,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
-import org.mobarena.stats.MobArenaStatsPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,11 +59,10 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
         if (mobarena == null) {
             return false;
         }
-        // Casts :(
-        arenaResolver = new ArenaResolver((MobArena) mobarena, getConfigSection());
-        playerResolver = new PlayerResolver((MobArena) mobarena);
+        arenaResolver = new ArenaResolver(mobarena, getConfigSection());
+        playerResolver = new PlayerResolver(mobarena);
         if (mastats != null) {
-            statsResolver = new StatsResolver((MobArena) mobarena, (MobArenaStatsPlugin) mastats);
+            statsResolver = new StatsResolver(mobarena, mastats);
         }
         return true;
     }

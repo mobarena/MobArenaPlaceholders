@@ -4,6 +4,7 @@ import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 import org.mobarena.stats.MobArenaStats;
 import org.mobarena.stats.store.ArenaStats;
 import org.mobarena.stats.store.GlobalStats;
@@ -14,9 +15,9 @@ public class StatsResolver {
     private final MobArena mobarena;
     private final MobArenaStats mastats;
 
-    StatsResolver(MobArena mobarena, MobArenaStats mastats) {
-        this.mobarena = mobarena;
-        this.mastats = mastats;
+    StatsResolver(Plugin mobarena, Plugin mastats) {
+        this.mobarena = (MobArena) mobarena;
+        this.mastats = (MobArenaStats) mastats;
     }
 
     String resolve(OfflinePlayer player, String rest) {

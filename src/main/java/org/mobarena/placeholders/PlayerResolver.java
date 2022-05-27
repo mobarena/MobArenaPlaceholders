@@ -4,13 +4,14 @@ import com.garbagemule.MobArena.ArenaPlayerStatistics;
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 
 public class PlayerResolver {
 
     private final MobArena mobarena;
 
-    PlayerResolver(MobArena mobarena) {
-        this.mobarena = mobarena;
+    PlayerResolver(Plugin mobarena) {
+        this.mobarena = (MobArena) mobarena;
     }
 
     String resolve(OfflinePlayer target, String tail) {
