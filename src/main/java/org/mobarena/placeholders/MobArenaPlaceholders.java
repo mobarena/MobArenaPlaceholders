@@ -92,4 +92,3 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
     }
 
 }
-
