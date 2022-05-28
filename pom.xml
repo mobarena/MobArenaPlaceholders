@@ -22,7 +22,7 @@
       <version>dev-72bb017834-1</version>
     </dependency>
 
-    <!-- https://hub.spigotmc.org/nexus/content/groups/public/org/bukkit/bukkit/ -->
+    <!-- https://hub.spigotmc.org/nexus/content/groups/public/org/spigotmc/spigot-api/ -->
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
