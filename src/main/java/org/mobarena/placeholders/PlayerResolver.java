@@ -1,11 +1,15 @@
 package org.mobarena.placeholders;
 
+import com.garbagemule.MobArena.ArenaPlayer;
 import com.garbagemule.MobArena.ArenaPlayerStatistics;
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
+import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.util.function.Function;
 
 public class PlayerResolver {
 
@@ -21,62 +25,86 @@ public class PlayerResolver {
             return null;
         }
 
-        // Accept valid placeholders only (yikes!)
-        switch (tail) {
-            case "class":
-            case "kills":
-            case "damage-done":
-            case "damage-taken":
-            case "swings":
-            case "hits":
-            case "last-wave": {
-                break;
-            }
-            default: {
-                return null;
-            }
-        }
-
-        if (target == null || !target.isOnline()) {
-            return "";
-        }
-
-        Player player = target.getPlayer();
-        if (player == null) {
-            return "";
-        }
-
-        Arena arena = mobarena.getArenaMaster().getArenaWithPlayer(player);
-        if (arena == null || !arena.inArena(player)) {
-            return "";
-        }
-
-        ArenaPlayerStatistics currentStats = arena.getArenaPlayer(player).getStats();
+        // At this point in time, we need to check if the tail is a valid
+        // placeholder or not. However, all valid placeholders will have to
+        // run the same additional validation logic, so we can simply defer
+        // the actual value extraction using higher-order functions.
         switch (tail) {
             case "class": {
-                return currentStats.getClassName();
+                return withStats(target, ArenaPlayerStatistics::getClassName);
             }
             case "kills": {
-                return String.valueOf(currentStats.getInt("kills"));
+                return withIntStat(target, "kills");
             }
             case "damage-done": {
-                return String.valueOf(currentStats.getInt("dmgDone"));
+                return withIntStat(target, "dmgDone");
             }
             case "damage-taken": {
-                return String.valueOf(currentStats.getInt("dmgTaken"));
+                return withIntStat(target, "dmgTaken");
             }
             case "swings": {
-                return String.valueOf(currentStats.getInt("swings"));
+                return withIntStat(target, "swings");
             }
             case "hits": {
-                return String.valueOf(currentStats.getInt("hits"));
+                return withIntStat(target, "hits");
             }
             case "last-wave": {
-                return String.valueOf(currentStats.getInt("lastWave"));
+                return withIntStat(target, "lastWave");
             }
             default: {
                 return null;
             }
         }
     }
+
+    private String withIntStat(OfflinePlayer target, String key) {
+        return withStats(target, stats -> String.valueOf(stats.getInt(key)));
+    }
+
+    private String withStats(
+        OfflinePlayer target,
+        Function<ArenaPlayerStatistics, String> resolver
+    ) {
+        Player player = getPlayer(target);
+        if (player == null) {
+            return "";
+        }
+
+        Arena arena = getArena(player);
+        if (arena == null) {
+            return "";
+        }
+
+        ArenaPlayerStatistics stats = getStats(player, arena);
+        if (stats == null) {
+            return "";
+        }
+
+        return resolver.apply(stats);
+    }
+
+    private Player getPlayer(OfflinePlayer target) {
+        if (target == null || !target.isOnline()) {
+            return null;
+        }
+        return target.getPlayer();
+    }
+
+    private Arena getArena(Player player) {
+        ArenaMaster am = mobarena.getArenaMaster();
+        Arena arena = am.getArenaWithPlayer(player);
+        if (arena == null || !arena.inArena(player)) {
+            return null;
+        }
+        return arena;
+    }
+
+    private ArenaPlayerStatistics getStats(Player player, Arena arena) {
+        ArenaPlayer ap = arena.getArenaPlayer(player);
+        if (ap == null) {
+            return null;
+        }
+        return ap.getStats();
+    }
+
 }
