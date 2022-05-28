@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.function.Function;
 
-public class PlayerResolver {
+class PlayerResolver {
 
     private final MobArena mobarena;
 

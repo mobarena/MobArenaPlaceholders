@@ -10,7 +10,7 @@ import org.mobarena.stats.store.ArenaStats;
 import org.mobarena.stats.store.GlobalStats;
 import org.mobarena.stats.store.PlayerStats;
 
-public class StatsResolver {
+class StatsResolver {
 
     private final MobArena mobarena;
     private final MobArenaStats mastats;
