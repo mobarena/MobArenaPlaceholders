@@ -15,7 +15,6 @@
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>com.github.mobarena</groupId>
       <artifactId>MobArenaStats</artifactId>
@@ -44,11 +43,9 @@
       <version>2.10.10</version>
       <scope>provided</scope>
     </dependency>
-
   </dependencies>
 
   <repositories>
-
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
@@ -63,7 +60,6 @@
       <id>placeholderapi</id>
       <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
-
   </repositories>
 
   <build>
@@ -76,6 +72,7 @@
           <finalName>MAPlaceholders</finalName>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
