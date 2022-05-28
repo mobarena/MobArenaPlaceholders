@@ -20,11 +20,31 @@ public class PlayerResolver {
             return null;
         }
 
+        // Accept valid placeholders only (yikes!)
+        switch (tail) {
+            case "class":
+            case "kills":
+            case "damage-done":
+            case "damage-taken":
+            case "swings":
+            case "hits":
+            case "last-wave": {
+                break;
+            }
+            default: {
+                return null;
+            }
+        }
+
         if (target == null || !target.isOnline()) {
-            return null;
+            return "";
         }
 
         OfflinePlayer player = target.getPlayer();
+        if (player == null) {
+            return "";
+        }
+
         Arena arena = mobarena.getArenaMaster().getArenaWithPlayer(player.getPlayer());
         if (arena == null || !arena.inArena(player.getPlayer())) {
             return "";
