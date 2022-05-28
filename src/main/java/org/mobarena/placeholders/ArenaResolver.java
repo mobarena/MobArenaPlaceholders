@@ -5,6 +5,7 @@ import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 class ArenaResolver {
@@ -23,9 +24,38 @@ class ArenaResolver {
         if (rest == null) {
             return null;
         }
+
+        // mobarena_arena_<key> is invalid
         String[] parts = rest.split("_", 2);
+        if (parts.length != 2) {
+            return null;
+        }
+
         String head = parts[0];
-        String tail = (parts.length > 1) ? parts[1] : null;
+        String tail = parts[1];
+
+        // replicated switch, yikes!
+        switch (tail) {
+            case "current-wave":
+            case "final-wave":
+            case "live-mobs":
+            case "ready-players":
+            case "live-players":
+            case "dead-players":
+            case "initial-players":
+            case "lobby-players":
+            case "min-players":
+            case "max-players":
+            case "auto-start-timer":
+            case "state":
+            case "name": {
+                break;
+            }
+            default: {
+                return null;
+            }
+        }
+
         Arena arena = getArenaByKey(player, head);
         if (tail == null || arena == null) {
             return "";
@@ -89,6 +119,13 @@ class ArenaResolver {
     private Arena getArenaByKey(OfflinePlayer player, String key) {
         ArenaMaster am = mobarena.getArenaMaster();
         if (key.equals("$current")) {
+            if (player == null || !player.isOnline()) {
+                return null;
+            }
+            Player p = player.getPlayer();
+            if (p == null) {
+                return null;
+            }
             return am.getArenaWithPlayer(player.getPlayer());
         } else {
             return am.getArenaWithName(key);
