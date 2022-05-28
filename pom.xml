@@ -15,6 +15,7 @@
   </properties>
 
   <dependencies>
+    <!-- https://jitpack.io/#mobarena/MobArenaStats -->
     <dependency>
       <groupId>com.github.mobarena</groupId>
       <artifactId>MobArenaStats</artifactId>
@@ -37,6 +38,7 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- https://repo.extendedclip.com/content/repositories/placeholderapi/me/clip/placeholderapi/ -->
     <dependency>
       <groupId>me.clip</groupId>
       <artifactId>placeholderapi</artifactId>
