@@ -81,7 +81,6 @@ class PlayerResolverTest {
         ArenaMaster am = mock(ArenaMaster.class);
         when(target.isOnline()).thenReturn(true);
         when(target.getPlayer()).thenReturn(player);
-        when(player.getPlayer()).thenReturn(player);
         when(mobarena.getArenaMaster()).thenReturn(am);
         when(am.getArenaWithPlayer(player)).thenReturn(null);
 
@@ -101,7 +100,6 @@ class PlayerResolverTest {
         int kills = 42;
         when(target.isOnline()).thenReturn(true);
         when(target.getPlayer()).thenReturn(player);
-        when(player.getPlayer()).thenReturn(player);
         when(mobarena.getArenaMaster()).thenReturn(am);
         when(am.getArenaWithPlayer(player)).thenReturn(arena);
         when(arena.inArena(player)).thenReturn(true);
