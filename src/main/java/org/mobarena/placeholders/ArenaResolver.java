@@ -1,12 +1,18 @@
 package org.mobarena.placeholders;
 
 import com.garbagemule.MobArena.MobArena;
+import com.garbagemule.MobArena.MonsterManager;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
+import com.garbagemule.MobArena.util.timer.AutoStartTimer;
+import com.garbagemule.MobArena.waves.WaveManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Collection;
+import java.util.function.Function;
 
 class ArenaResolver {
 
@@ -18,8 +24,7 @@ class ArenaResolver {
         this.config = config;
     }
 
-
-    String resolve(OfflinePlayer player, String rest) {
+    String resolve(OfflinePlayer target, String rest) {
         // mobarena_arena is invalid
         if (rest == null) {
             return null;
@@ -31,84 +36,87 @@ class ArenaResolver {
             return null;
         }
 
-        String head = parts[0];
+        String key = parts[0];
         String tail = parts[1];
 
-        // replicated switch, yikes!
         switch (tail) {
-            case "current-wave":
-            case "final-wave":
-            case "live-mobs":
-            case "ready-players":
-            case "live-players":
-            case "dead-players":
-            case "initial-players":
-            case "lobby-players":
-            case "min-players":
-            case "max-players":
-            case "auto-start-timer":
-            case "state":
             case "name": {
-                break;
-            }
-            default: {
-                return null;
-            }
-        }
-
-        Arena arena = getArenaByKey(player, head);
-        if (tail == null || arena == null) {
-            return "";
-        }
-        switch (tail) {
-            case "current-wave": {
-                return String.valueOf(arena.getWaveManager().getWaveNumber());
-            }
-            case "final-wave": {
-                if (arena.getWaveManager().getFinalWave() > 0) {
-                    return String.valueOf(arena.getWaveManager().getFinalWave());
-                } else {
-                    return "∞";
-                }
-            }
-            case "live-mobs": {
-                return String.valueOf(arena.getMonsterManager().getMonsters().size());
-            }
-            case "ready-players": {
-                return String.valueOf(arena.getReadyPlayersInLobby().size());
-            }
-            case "live-players": {
-                return String.valueOf(arena.getPlayersInArena().size());
-            }
-            case "dead-players": {
-                if (!arena.isRunning()) {
-                    return "0";
-                }
-                return String.valueOf((arena.getPlayerCount() - arena.getPlayersInArena().size()));
-            }
-            case "initial-players": {
-                if (!arena.isRunning()) {
-                    return "0";
-                }
-                return String.valueOf(arena.getPlayerCount());
-            }
-            case "lobby-players": {
-                return String.valueOf(arena.getPlayersInLobby().size());
-            }
-            case "min-players": {
-                return String.valueOf(arena.getMinPlayers());
-            }
-            case "max-players": {
-                return String.valueOf(arena.getMaxPlayers());
-            }
-            case "auto-start-timer": {
-                return String.valueOf(arena.getAutoStartTimer().getRemaining() / 20);
+                return withArena(target, key, Arena::getSlug);
             }
             case "state": {
-                return getArenaState(arena);
+                return withArena(target, key, arena -> {
+                    if (arena.inEditMode()) {
+                        return config.getString("editing");
+                    }
+                    if (arena.isRunning()) {
+                        return config.getString("running");
+                    }
+                    if (arena.isEnabled()) {
+                        return config.getString("available");
+                    }
+                    if (!arena.isEnabled()) {
+                        return config.getString("disabled");
+                    }
+                    return "";
+                });
             }
-            case "name": {
-                return arena.getSlug();
+            case "min-players": {
+                return withNumber(target, key, Arena::getMinPlayers);
+            }
+            case "max-players": {
+                return withNumber(target, key, Arena::getMaxPlayers);
+            }
+            case "auto-start-timer": {
+                return withNumber(target, key, arena -> {
+                    AutoStartTimer timer = arena.getAutoStartTimer();
+                    return timer.getRemaining() / 20;
+                });
+            }
+            case "current-wave": {
+                return withNumber(target, key, arena -> {
+                    WaveManager waves = arena.getWaveManager();
+                    return waves.getWaveNumber();
+                });
+            }
+            case "final-wave": {
+                return withArena(target, key, arena -> {
+                    WaveManager waves = arena.getWaveManager();
+                    int value = waves.getFinalWave();
+                    return (value > 0) ? String.valueOf(value) : "∞";
+                });
+            }
+            case "lobby-players": {
+                return withPlayerCount(target, key, Arena::getPlayersInLobby);
+            }
+            case "ready-players": {
+                return withPlayerCount(target, key, Arena::getReadyPlayersInLobby);
+            }
+            case "live-players": {
+                return withPlayerCount(target, key, Arena::getPlayersInArena);
+            }
+            case "dead-players": {
+                return withNumber(target, key, arena -> {
+                    if (!arena.isRunning()) {
+                        return 0;
+                    }
+                    int total = arena.getPlayerCount();
+                    int live = arena.getPlayersInArena().size();
+                    return (total - live);
+                });
+            }
+            case "initial-players": {
+                return withNumber(target, key, arena -> {
+                    if (!arena.isRunning()) {
+                        return 0;
+                    }
+                    return arena.getPlayerCount();
+                });
+            }
+            case "live-mobs": {
+                return withNumber(target, key, arena -> {
+                    MonsterManager monsters = arena.getMonsterManager();
+                    return monsters.getMonsters().size();
+                });
             }
             default: {
                 return null;
@@ -116,33 +124,53 @@ class ArenaResolver {
         }
     }
 
-    private Arena getArenaByKey(OfflinePlayer player, String key) {
-        ArenaMaster am = mobarena.getArenaMaster();
-        if (key.equals("$current")) {
-            if (player == null || !player.isOnline()) {
-                return null;
-            }
-            Player p = player.getPlayer();
-            if (p == null) {
-                return null;
-            }
-            return am.getArenaWithPlayer(player.getPlayer());
-        } else {
-            return am.getArenaWithName(key);
-        }
+    private String withNumber(
+        OfflinePlayer target,
+        String key,
+        Function<Arena, Number> resolver
+    ) {
+        return withArena(target, key, arena -> {
+            Number value = resolver.apply(arena);
+            return String.valueOf(value);
+        });
     }
 
-    private String getArenaState(Arena arena) {
-        if (arena.inEditMode()) {
-            return config.getString("editing");
-        } else if (arena.isRunning()) {
-            return config.getString("running");
-        } else if (arena.isEnabled()) {
-            return config.getString("available");
-        } else if (!arena.isEnabled()) {
-            return config.getString("disabled");
-        } else {
+    private String withPlayerCount(
+        OfflinePlayer target,
+        String key,
+        Function<Arena, Collection<Player>> resolver
+    ) {
+        return withArena(target, key, arena -> {
+            Collection<Player> players = resolver.apply(arena);
+            return String.valueOf(players.size());
+        });
+    }
+
+    private String withArena(
+        OfflinePlayer target,
+        String key,
+        Function<Arena, String> resolver
+    ) {
+        Arena arena = getArenaByKey(target, key);
+        if (arena == null) {
             return "";
         }
+        return resolver.apply(arena);
     }
+
+    private Arena getArenaByKey(OfflinePlayer target, String key) {
+        ArenaMaster am = mobarena.getArenaMaster();
+        if (key.equals("$current")) {
+            if (target == null || !target.isOnline()) {
+                return null;
+            }
+            Player player = target.getPlayer();
+            if (player == null) {
+                return null;
+            }
+            return am.getArenaWithPlayer(player);
+        }
+        return am.getArenaWithName(key);
+    }
+
 }
