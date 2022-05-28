@@ -42,6 +42,7 @@
       <groupId>com.github.mobarena</groupId>
       <artifactId>MobArenaStats</artifactId>
       <version>dev-72bb017834-1</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
