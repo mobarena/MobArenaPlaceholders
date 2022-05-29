@@ -81,10 +81,11 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
                 return playerResolver.resolve(player, tail);
             }
             case "stats": {
-                if (statsResolver != null) {
-                    return statsResolver.resolve(player, tail);
+                if (statsResolver == null) {
+                    warning("Failed to resolve \"mobarena_" + identifier + "\", because the MobArenaStats extension was not found!");
+                    return null;
                 }
-                return "MobArenaStats could not be found! Please download and install it first!";
+                return statsResolver.resolve(player, tail);
             }
             default: {
                 return null;
