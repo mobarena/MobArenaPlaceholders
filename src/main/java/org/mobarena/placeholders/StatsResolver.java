@@ -10,6 +10,9 @@ import org.mobarena.stats.MobArenaStats;
 import org.mobarena.stats.store.ArenaStats;
 import org.mobarena.stats.store.GlobalStats;
 import org.mobarena.stats.store.PlayerStats;
+import org.mobarena.stats.store.StatsStore;
+
+import java.util.function.Function;
 
 class StatsResolver {
 
@@ -26,80 +29,90 @@ class StatsResolver {
         if (rest == null) {
             return null;
         }
-        String[] parts = rest.split("_", 2);
-        String head = parts[0];
-        String tail = (parts.length > 1) ? parts[1] : null;
-        if (tail != null) {
-            switch (head) {
-                case "arena": {
-                    return resolveArenaStat(player, tail);
-                }
-                case "global": {
-                    return resolveGlobalStat(tail);
-                }
-                case "player": {
-                    return resolvePlayerStat(player, tail);
-                }
-            }
-        }
-        return null;
-    }
 
-    private String resolveArenaStat(OfflinePlayer player, String rest) {
+        // mobarena_stats_<area> is invalid
         String[] parts = rest.split("_", 2);
-        String head = parts[0];
-        String tail = (parts.length > 1) ? parts[1] : null;
-        if (tail == null) {
+        if (parts.length != 2) {
             return null;
         }
 
-        // duplicate switch, yikes!
-        switch (tail) {
-            case "total-kills":
-            case "total-seconds":
-            case "total-sessions":
-            case "total-waves":
-            case "highest-kills":
-            case "highest-wave":
-            case "highest-seconds": {
-                break;
+        String area = parts[0];
+        String tail = parts[1];
+
+        // Branch off based on area
+        switch (area) {
+            case "arena": {
+                return resolveArenaStat(player, tail);
+            }
+            case "global": {
+                return resolveGlobalStat(tail);
+            }
+            case "player": {
+                return resolvePlayerStat(player, tail);
             }
             default: {
                 return null;
             }
         }
+    }
 
-        Arena arena = getArenaByKey(player, head);
+    private String resolveArenaStat(OfflinePlayer target, String rest) {
+        // mobarena_stats_arena_<key> is invalid
+        String[] parts = rest.split("_", 2);
+        if (parts.length != 2) {
+            return null;
+        }
+
+        String key = parts[0];
+        String tail = parts[1];
+
+        switch (tail) {
+            case "total-kills": {
+                return withArenaStats(target, key, stats -> stats.totalKills);
+            }
+            case "total-seconds": {
+                return withArenaStats(target, key, stats -> stats.totalSeconds);
+            }
+            case "total-sessions": {
+                return withArenaStats(target, key, stats -> stats.totalSessions);
+            }
+            case "total-waves": {
+                return withArenaStats(target, key, stats -> stats.totalWaves);
+            }
+            case "highest-kills": {
+                return withArenaStats(target, key, stats -> stats.highestKills);
+            }
+            case "highest-wave": {
+                return withArenaStats(target, key, stats -> stats.highestWave);
+            }
+            case "highest-seconds": {
+                return withArenaStats(target, key, stats -> stats.highestSeconds);
+            }
+            default: {
+                return null;
+            }
+        }
+    }
+
+    private String withArenaStats(
+        OfflinePlayer target,
+        String key,
+        Function<ArenaStats, Number> resolver
+    ) {
+        Arena arena = getArenaByKey(target, key);
         if (arena == null) {
             return "";
         }
-        ArenaStats stats = mastats.getStatsStore().getArenaStats(arena.getSlug());
-        switch (tail) {
-            case "total-kills": {
-                return String.valueOf(stats.totalKills);
+
+        return withStatsStore(store -> {
+            ArenaStats stats = store.getArenaStats(arena.getSlug());
+            if (stats == null) {
+                return "";
             }
-            case "total-seconds": {
-                return String.valueOf(stats.totalSeconds);
-            }
-            case "total-sessions": {
-                return String.valueOf(stats.totalSessions);
-            }
-            case "total-waves": {
-                return String.valueOf(stats.totalWaves);
-            }
-            case "highest-kills": {
-                return String.valueOf(stats.highestKills);
-            }
-            case "highest-wave": {
-                return String.valueOf(stats.highestWave);
-            }
-            case "highest-seconds": {
-                return String.valueOf(stats.highestSeconds);
-            }
-            default: {
-                return null;
-            }
-        }
+
+            Number value = resolver.apply(stats);
+            return String.valueOf(value);
+        });
     }
 
     private String resolveGlobalStat(String key) {
@@ -107,32 +120,18 @@ class StatsResolver {
             return null;
         }
 
-        // duplicate switch, yikes!
-        switch (key) {
-            case "total-kills":
-            case "total-waves":
-            case "total-seconds":
-            case "total-sessions": {
-                break;
-            }
-            default: {
-                return null;
-            }
-        }
-
-        GlobalStats stats = mastats.getStatsStore().getGlobalStats();
         switch (key) {
             case "total-kills": {
-                return String.valueOf(stats.totalKills);
+                return withGlobalStats(stats -> stats.totalKills);
             }
             case "total-waves": {
-                return String.valueOf(stats.totalWaves);
+                return withGlobalStats(stats -> stats.totalWaves);
             }
             case "total-seconds": {
-                return String.valueOf(stats.totalSeconds);
+                return withGlobalStats(stats -> stats.totalSeconds);
             }
             case "total-sessions": {
-                return String.valueOf(stats.totalSessions);
+                return withGlobalStats(stats -> stats.totalSessions);
             }
             default: {
                 return null;
@@ -140,40 +139,64 @@ class StatsResolver {
         }
     }
 
-    private String resolvePlayerStat(OfflinePlayer player, String key) {
+    private String withGlobalStats(Function<GlobalStats, Number> resolver) {
+        return withStatsStore(store -> {
+            GlobalStats stats = store.getGlobalStats();
+            if (stats == null) {
+                return "";
+            }
+
+            Number value = resolver.apply(stats);
+            return String.valueOf(value);
+        });
+    }
+
+    private String resolvePlayerStat(OfflinePlayer target, String key) {
         if (key == null) {
             return null;
         }
 
-        // duplicate switch, yikes!
         switch (key) {
-            case "total-kills":
-            case "total-waves":
-            case "total-seconds":
+            case "total-kills": {
+                return withPlayerStats(target, stats -> stats.totalKills);
+            }
+            case "total-waves": {
+                return withPlayerStats(target, stats -> stats.totalWaves);
+            }
+            case "total-seconds": {
+                return withPlayerStats(target, stats -> stats.totalSeconds);
+            }
             case "total-sessions": {
-                break;
+                return withPlayerStats(target, stats -> stats.totalSessions);
             }
             default: {
                 return null;
             }
         }
+    }
 
-        PlayerStats stats = mastats.getStatsStore().getPlayerStats(player.getName());
-        switch (key) {
-            case "total-kills": {
-                return String.valueOf(stats.totalKills);
+    private String withPlayerStats(
+        OfflinePlayer target,
+        Function<PlayerStats, Number> resolver
+    ) {
+        return withStatsStore(store -> {
+            String name = target.getName();
+            PlayerStats stats = store.getPlayerStats(name);
+            if (stats == null) {
+                return "";
             }
-            case "total-waves": {
-                return String.valueOf(stats.totalWaves);
-            }
-            case "total-seconds": {
-                return String.valueOf(stats.totalSeconds);
-            }
-            case "total-sessions": {
-                return String.valueOf(stats.totalSessions);
-            }
+
+            Number value = resolver.apply(stats);
+            return String.valueOf(value);
+        });
+    }
+
+    private String withStatsStore(Function<StatsStore, String> resolver) {
+        StatsStore store = mastats.getStatsStore();
+        if (store == null) {
+            return "";
         }
-        return null;
+        return resolver.apply(store);
     }
 
     private Arena getArenaByKey(OfflinePlayer target, String key) {
