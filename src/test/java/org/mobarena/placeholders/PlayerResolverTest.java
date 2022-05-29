@@ -65,6 +65,21 @@ class PlayerResolverTest {
     }
 
     @Test
+    void returnsBlankIfPlayerNotInArenaSession() {
+        OfflinePlayer target = mock(OfflinePlayer.class);
+        Player player = mock(Player.class);
+        Arena arena = mock(Arena.class);
+        when(target.isOnline()).thenReturn(true);
+        when(target.getPlayer()).thenReturn(player);
+        when(lookup.lookupByPlayer(player)).thenReturn(arena);
+        when(arena.inArena(player)).thenReturn(false);
+
+        String result = subject.resolve(target, "kills");
+
+        assertThat(result, equalTo(""));
+    }
+
+    @Test
     void returnsKillCountFromStats() {
         OfflinePlayer target = mock(OfflinePlayer.class);
         Player player = mock(Player.class);
