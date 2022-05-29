@@ -1,10 +1,7 @@
 package org.mobarena.placeholders;
 
-import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
-import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.mobarena.stats.MobArenaStats;
 import org.mobarena.stats.store.ArenaStats;
@@ -16,15 +13,15 @@ import java.util.function.Function;
 
 class StatsResolver {
 
-    private final MobArena mobarena;
+    private final ArenaLookup lookup;
     private final MobArenaStats mastats;
 
-    StatsResolver(Plugin mobarena, Plugin mastats) {
-        this.mobarena = (MobArena) mobarena;
+    StatsResolver(ArenaLookup lookup, Plugin mastats) {
+        this.lookup = lookup;
         this.mastats = (MobArenaStats) mastats;
     }
 
-    String resolve(OfflinePlayer player, String rest) {
+    String resolve(OfflinePlayer target, String rest) {
         // mobarena_stats is invalid
         if (rest == null) {
             return null;
@@ -42,13 +39,13 @@ class StatsResolver {
         // Branch off based on area
         switch (area) {
             case "arena": {
-                return resolveArenaStat(player, tail);
+                return resolveArenaStat(target, tail);
             }
             case "global": {
                 return resolveGlobalStat(tail);
             }
             case "player": {
-                return resolvePlayerStat(player, tail);
+                return resolvePlayerStat(target, tail);
             }
             default: {
                 return null;
@@ -99,7 +96,7 @@ class StatsResolver {
         String key,
         Function<ArenaStats, Number> resolver
     ) {
-        Arena arena = getArenaByKey(target, key);
+        Arena arena = lookup.lookup(target, key);
         if (arena == null) {
             return "";
         }
@@ -197,21 +194,6 @@ class StatsResolver {
             return "";
         }
         return resolver.apply(store);
-    }
-
-    private Arena getArenaByKey(OfflinePlayer target, String key) {
-        ArenaMaster am = mobarena.getArenaMaster();
-        if (key.equals("$current")) {
-            if (target == null || !target.isOnline()) {
-                return null;
-            }
-            Player player = target.getPlayer();
-            if (player == null) {
-                return null;
-            }
-            return am.getArenaWithPlayer(player);
-        }
-        return am.getArenaWithName(key);
     }
 
 }

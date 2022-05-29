@@ -1,26 +1,23 @@
 package org.mobarena.placeholders;
 
-import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.MonsterManager;
 import com.garbagemule.MobArena.framework.Arena;
-import com.garbagemule.MobArena.framework.ArenaMaster;
 import com.garbagemule.MobArena.util.timer.AutoStartTimer;
 import com.garbagemule.MobArena.waves.WaveManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
 import java.util.function.Function;
 
 class ArenaResolver {
 
-    private final MobArena mobarena;
+    private final ArenaLookup lookup;
     private final ConfigurationSection config;
 
-    ArenaResolver(Plugin mobarena, ConfigurationSection config) {
-        this.mobarena = (MobArena) mobarena;
+    ArenaResolver(ArenaLookup lookup, ConfigurationSection config) {
+        this.lookup = lookup;
         this.config = config;
     }
 
@@ -151,26 +148,11 @@ class ArenaResolver {
         String key,
         Function<Arena, String> resolver
     ) {
-        Arena arena = getArenaByKey(target, key);
+        Arena arena = lookup.lookup(target, key);
         if (arena == null) {
             return "";
         }
         return resolver.apply(arena);
-    }
-
-    private Arena getArenaByKey(OfflinePlayer target, String key) {
-        ArenaMaster am = mobarena.getArenaMaster();
-        if (key.equals("$current")) {
-            if (target == null || !target.isOnline()) {
-                return null;
-            }
-            Player player = target.getPlayer();
-            if (player == null) {
-                return null;
-            }
-            return am.getArenaWithPlayer(player);
-        }
-        return am.getArenaWithName(key);
     }
 
 }

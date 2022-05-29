@@ -59,10 +59,11 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
         if (mobarena == null) {
             return false;
         }
-        arenaResolver = new ArenaResolver(mobarena, getConfigSection());
-        playerResolver = new PlayerResolver(mobarena);
+        ArenaLookup lookup = new ArenaLookup(mobarena);
+        arenaResolver = new ArenaResolver(lookup, getConfigSection());
+        playerResolver = new PlayerResolver(lookup);
         if (mastats != null) {
-            statsResolver = new StatsResolver(mobarena, mastats);
+            statsResolver = new StatsResolver(lookup, mastats);
         }
         return true;
     }
