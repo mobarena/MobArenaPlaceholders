@@ -4,6 +4,7 @@ import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.framework.Arena;
 import com.garbagemule.MobArena.framework.ArenaMaster;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.mobarena.stats.MobArenaStats;
 import org.mobarena.stats.store.ArenaStats;
@@ -48,8 +49,28 @@ class StatsResolver {
         String[] parts = rest.split("_", 2);
         String head = parts[0];
         String tail = (parts.length > 1) ? parts[1] : null;
+        if (tail == null) {
+            return null;
+        }
+
+        // duplicate switch, yikes!
+        switch (tail) {
+            case "total-kills":
+            case "total-seconds":
+            case "total-sessions":
+            case "total-waves":
+            case "highest-kills":
+            case "highest-wave":
+            case "highest-seconds": {
+                break;
+            }
+            default: {
+                return null;
+            }
+        }
+
         Arena arena = getArenaByKey(player, head);
-        if (arena == null || tail == null) {
+        if (arena == null) {
             return "";
         }
         ArenaStats stats = mastats.getStatsStore().getArenaStats(arena.getSlug());
@@ -82,10 +103,24 @@ class StatsResolver {
     }
 
     private String resolveGlobalStat(String key) {
-        GlobalStats stats = mastats.getStatsStore().getGlobalStats();
         if (key == null) {
             return null;
         }
+
+        // duplicate switch, yikes!
+        switch (key) {
+            case "total-kills":
+            case "total-waves":
+            case "total-seconds":
+            case "total-sessions": {
+                break;
+            }
+            default: {
+                return null;
+            }
+        }
+
+        GlobalStats stats = mastats.getStatsStore().getGlobalStats();
         switch (key) {
             case "total-kills": {
                 return String.valueOf(stats.totalKills);
@@ -106,10 +141,24 @@ class StatsResolver {
     }
 
     private String resolvePlayerStat(OfflinePlayer player, String key) {
-        PlayerStats stats = mastats.getStatsStore().getPlayerStats(player.getName());
         if (key == null) {
             return null;
         }
+
+        // duplicate switch, yikes!
+        switch (key) {
+            case "total-kills":
+            case "total-waves":
+            case "total-seconds":
+            case "total-sessions": {
+                break;
+            }
+            default: {
+                return null;
+            }
+        }
+
+        PlayerStats stats = mastats.getStatsStore().getPlayerStats(player.getName());
         switch (key) {
             case "total-kills": {
                 return String.valueOf(stats.totalKills);
@@ -127,13 +176,19 @@ class StatsResolver {
         return null;
     }
 
-    private Arena getArenaByKey(OfflinePlayer player, String key) {
+    private Arena getArenaByKey(OfflinePlayer target, String key) {
         ArenaMaster am = mobarena.getArenaMaster();
         if (key.equals("$current")) {
-            return am.getArenaWithPlayer(player.getPlayer());
-        } else {
-            return am.getArenaWithName(key);
+            if (target == null || !target.isOnline()) {
+                return null;
+            }
+            Player player = target.getPlayer();
+            if (player == null) {
+                return null;
+            }
+            return am.getArenaWithPlayer(player);
         }
+        return am.getArenaWithName(key);
     }
 
 }
