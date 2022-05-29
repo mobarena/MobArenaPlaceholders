@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class MobArenaPlaceholders extends PlaceholderExpansion implements Configurable {
 
     private ArenaResolver arenaResolver;
@@ -18,16 +19,19 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
     private StatsResolver statsResolver;
 
     @Override
+    @NotNull
     public String getAuthor() {
         return "Maroon28";
     }
 
     @Override
+    @NotNull
     public String getIdentifier() {
         return "mobarena";
     }
 
     @Override
+    @NotNull
     public String getVersion() {
         return "1.0.0";
     }
