@@ -57,18 +57,21 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
         if (!super.register()) {
             return false;
         }
+
         PluginManager manager = Bukkit.getPluginManager();
         Plugin mobarena = manager.getPlugin(getRequiredPlugin());
         Plugin mastats = manager.getPlugin("MobArenaStats");
         if (mobarena == null) {
             return false;
         }
+
         ArenaLookup lookup = new ArenaLookup(mobarena);
         arenaResolver = new ArenaResolver(lookup, getConfigSection());
         playerResolver = new PlayerResolver(lookup);
         if (mastats != null) {
             statsResolver = new StatsResolver(lookup, mastats);
         }
+
         return true;
     }
 
@@ -77,6 +80,7 @@ public class MobArenaPlaceholders extends PlaceholderExpansion implements Config
         String[] parts = identifier.split("_", 2);
         String head = parts[0];
         String tail = (parts.length > 1) ? parts[1] : null;
+
         switch (head) {
             case "arena": {
                 return arenaResolver.resolve(player, tail);
