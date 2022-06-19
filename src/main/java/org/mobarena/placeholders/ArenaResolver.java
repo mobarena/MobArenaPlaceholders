@@ -40,6 +40,9 @@ class ArenaResolver {
             case "slug": {
                 return withArena(target, key, Arena::getSlug);
             }
+            case "name": {
+                return withArena(target, key, Arena::configName);
+            }
             case "state": {
                 return withArena(target, key, arena -> {
                     if (arena.inEditMode()) {

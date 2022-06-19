@@ -141,6 +141,16 @@ class ArenaResolverTest {
         }
 
         @Test
+        void name() {
+            String name = "Bob Island";
+            when(arena.configName()).thenReturn(name);
+
+            String result = subject.resolve(target, slug + "_name");
+
+            assertThat(result, equalTo(name));
+        }
+
+        @Test
         void stateEditing() {
             String expected = "In Edit Mode";
             config.set("editing", expected);
