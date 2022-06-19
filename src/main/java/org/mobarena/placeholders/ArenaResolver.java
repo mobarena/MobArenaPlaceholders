@@ -37,7 +37,7 @@ class ArenaResolver {
         String tail = parts[1];
 
         switch (tail) {
-            case "name": {
+            case "slug": {
                 return withArena(target, key, Arena::getSlug);
             }
             case "state": {
