@@ -143,7 +143,7 @@ class StatsResolverTest {
     }
 
     @Test
-    void returnsLivePlayerCountFromArenaKey() {
+    void returnsTotalKillsFromArenaKey() {
         OfflinePlayer target = mock(OfflinePlayer.class);
         String slug = "castle";
         int kills = 42;
