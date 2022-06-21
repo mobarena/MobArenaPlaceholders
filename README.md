@@ -1,5 +1,8 @@
-# Installation
+# MobArenaPlaceholders [![Build Status](https://github.com/mobarena/MobArenaPlaceholders/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/mobarena/MobArenaPlaceholders/actions/workflows/build.yml)
+
 PlaceholderAPI expansion for MobArena.
+
+## Installation
 
 1. Download the latest *dev build* of MobArena from [here](https://github.com/garbagemule/MobArena/actions)
 2. Download the latest release of MobArenaStats from [here](https://github.com/mobarena/MobArenaStats)
