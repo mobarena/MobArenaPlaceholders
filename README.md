@@ -1,15 +1,25 @@
 # MobArenaPlaceholders [![Build Status](https://github.com/mobarena/MobArenaPlaceholders/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/mobarena/MobArenaPlaceholders/actions/workflows/build.yml)
 
-PlaceholderAPI expansion for MobArena.
+MobArenaPlaceholders is a _PlaceholderAPI expansion_ for MobArena and MobArenaStats.
 
-## Installation
+**Note:** This expansion requires MobArena 0.107 or later to work.
 
-1. Download the latest *dev build* of MobArena from [here](https://github.com/garbagemule/MobArena/actions)
-2. Download the latest release of MobArenaStats from [here](https://github.com/mobarena/MobArenaStats)
-3. Download the latest release of MobArenaPlaceholders on the right.
-4. Upload the MobArenaPlaceholders jar to `plugins/PlaceholderAPI/expansions`
-5. Run `/papi reload`
-6. And that's it! Have fun!
+## Getting Started
+
+The expansion _requires_ PlaceholderAPI 2.11.1 or later and MobArena 0.107 or later.
+MobArenaStats 1.0 or later is supported but not required for the expansion to work.
+
+- PlaceholderAPI: [GitHub](https://github.com/PlaceholderAPI/PlaceholderAPI), [Spigot](https://www.spigotmc.org/resources/placeholderapi.6245/)
+- MobArena: [GitHub](https://github.com/garbagemule/MobArena), [Spigot](https://www.spigotmc.org/resources/mobarena.34110/)
+- MobArenaStats: [GitHub](https://github.com/mobarena/MobArenaStats)
+
+Download a copy of MobArenaPlaceholders from one of these release channels:
+
+- Stable (recommended): [Latest release](https://github.com/mobarena/MobArenaPlaceholders/releases/latest)
+- Dev (experimental): [Latest build](https://github.com/mobarena/MobArenaPlaceholders/actions/workflows/build.yml)
+
+Place the jar-file in your server's `plugins/PlaceholderAPI/expansions` folder like you would any other expansion file.
+If your server was running when the expansion was uploaded, you can run `/papi reload` to load it.
 
 ## Available Placeholders
 
